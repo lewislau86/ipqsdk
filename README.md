@@ -1,4 +1,4 @@
-#安装sdkApp文件下的app
+#首先安装sdkApp文件下的app
 
 
 

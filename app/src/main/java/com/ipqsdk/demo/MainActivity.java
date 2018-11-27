@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
     private final int STOPPING = 3;
     private final int STOPPED = 4;
     private final int PermissionDenied = 10;
-    private final int NoServer = 11;
+    private final int NoServer = 11;  //没有获取到ss服务器
     private final int UnknownError = 12;
 
     public class StateReceiver extends BroadcastReceiver

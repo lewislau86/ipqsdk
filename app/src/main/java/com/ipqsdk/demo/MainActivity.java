@@ -54,7 +54,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 Intent intent = new Intent();
-                intent.putExtra("param", "{\"code\":1}");
+                intent.putExtra("type", 1); //连接VPN
+                intent.putExtra("province", "四川省"); //可选，指定连接vpn的省份
+                intent.putExtra("city", "成都市"); //可选，指定连接vpn的城市
+                intent.putExtra("username", ""); //可选，如果sdkAPP已登录则不需要
+                intent.putExtra("key", ""); //可选，如果sdkAPP已登录则不需要
                 intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 {
@@ -72,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             {
                 Log.e("MainActivity", "onClick");
                 Intent intent = new Intent();
-                intent.putExtra("param", "{\"code\":2}");
+                intent.putExtra("type", 2); //断开vpn
                 intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 {
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        //注册接受vpn返回结果的广播
         receiver = new StateReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.shadowsocks.state");
@@ -93,6 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume()
     {
+        //判断是否安装sdkAPP
         if (!checkSsExist())
             findViewById(R.id.tv_hint).setVisibility(View.VISIBLE);
         else findViewById(R.id.tv_hint).setVisibility(View.GONE);
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity
     private final int CONNECTED = 2;
     private final int STOPPING = 3;
     private final int STOPPED = 4;
-    private final int PermissionDenied = 10;
+    private final int UserDenied = 10; //用户权限不足
     private final int NoServer = 11;  //没有获取到ss服务器
     private final int UnknownError = 12;
 
@@ -132,8 +138,8 @@ public class MainActivity extends AppCompatActivity
                 case STOPPED:
                     tv_state.setText("已断开");
                     break;
-                case PermissionDenied:
-                    tv_state.setText("权限不足");
+                case UserDenied:
+                    tv_state.setText("用户权限不足");
                     break;
                 case NoServer:
                     tv_state.setText("没有获取到服务器");

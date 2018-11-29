@@ -1,4 +1,4 @@
-######首先安装sdkApp文件夹下的sdkApp.apk
+#首先安装sdkApp文件夹下的sdkApp.apk
 
 
 

@@ -7,6 +7,7 @@
 #暂定参数param 1: 连接，2:断开，具体参见MainActivity代码
 
 #连接vpn
+
 ```Java
                    Intent intent = new Intent();
                    intent.putExtra("type", 1); //连接VPN
@@ -22,9 +23,9 @@
                    {
                        startService(intent);
                    }
-
+```
+                   
 #断开vpn
-
 ```Java
                 Intent intent = new Intent();
                 intent.putExtra("type", 2); //断开vpn
@@ -36,9 +37,10 @@
                 {
                     startService(intent);
                 }
-                        
+```                        
                         
 #结果由广播方式回传action:com.shadowsocks.state
+```Java
     public class StateReceiver extends BroadcastReceiver
     {
 
@@ -49,6 +51,7 @@
         }
         
      }   
+```
 
 参数state
 

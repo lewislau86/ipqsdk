@@ -7,6 +7,7 @@
 #暂定参数param 1: 连接，2:断开，具体参见MainActivity代码
 
 #连接vpn
+```Java
                    Intent intent = new Intent();
                    intent.putExtra("type", 1); //连接VPN
                    intent.putExtra("province", "四川省"); //可选，指定连接vpn的省份
@@ -23,6 +24,8 @@
                    }
 
 #断开vpn
+
+```Java
                 Intent intent = new Intent();
                 intent.putExtra("type", 2); //断开vpn
                 intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));

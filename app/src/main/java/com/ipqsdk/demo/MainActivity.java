@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity
             {
                 Intent intent = new Intent();
                 intent.putExtra("type", 1); //连接VPN
-                intent.putExtra("province", "四川省"); //可选，指定连接vpn的省份
-                intent.putExtra("city", "成都市"); //可选，指定连接vpn的城市
-                intent.putExtra("username", ""); //可选，如果sdkAPP已登录则不需要
-                intent.putExtra("key", ""); //可选，如果sdkAPP已登录则不需要
+                intent.putExtra("province", "安微省"); //可选，指定连接vpn的省份
+                intent.putExtra("city", "黄山市"); //可选，指定连接vpn的城市
+                intent.putExtra("username", "testuser"); //可选，如果sdkAPP已登录则不需要
+                intent.putExtra("key", "testpwd"); //可选，如果sdkAPP已登录则不需要
                 intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 {

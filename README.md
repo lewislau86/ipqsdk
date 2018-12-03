@@ -61,8 +61,8 @@
     private final int STOPPING = 3;  //断开中
     private final int STOPPED = 4; //已断开
     private final int UserError=10; //用户权限不足 
-    private final int NoServer = 11;  //没有获取到ss服务器
-    private final int UnknownError = 12;  //位置错误
+    private final int NoServer = 11;  //没有获取到vpn服务器
+    private final int UnknownError = 12;  //其他错误
 
 
 

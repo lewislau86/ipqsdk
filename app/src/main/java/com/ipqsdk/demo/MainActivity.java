@@ -53,20 +53,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent();
+                Intent intent = new Intent("com.xiaoyu.whale.sdk.VPN_OPERATE");
+                intent.setComponent(new ComponentName("com.xiaoyu.whale",
+                        "com.xiaoyu.whale.receiver.VpnOperateReceiver"));
                 intent.putExtra("type", 1); //连接VPN
-                intent.putExtra("province", "安微省"); //可选，指定连接vpn的省份
-                intent.putExtra("city", "黄山市"); //可选，指定连接vpn的城市
+                intent.putExtra("province", "四川省"); //可选，指定连接vpn的省份
+                intent.putExtra("city", "成都市"); //可选，指定连接vpn的城市
                 intent.putExtra("username", "testuser"); //可选，如果sdkAPP已登录则不需要
-                intent.putExtra("key", "testpwd"); //可选，如果sdkAPP已登录则不需要
-                intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                {
-                    startForegroundService(intent);
-                } else
-                {
-                    startService(intent);
-                }
+                intent.putExtra("password", "testpwd"); //可选，如果sdkAPP已登录则不需要
+                sendBroadcast(intent);
             }
         });
         findViewById(R.id.tv_stop).setOnClickListener(new View.OnClickListener()
@@ -74,23 +69,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.e("MainActivity", "onClick");
-                Intent intent = new Intent();
+
+                Intent intent = new Intent("com.xiaoyu.whale.sdk.VPN_OPERATE");
+                intent.setComponent(new ComponentName("com.xiaoyu.whale",
+                        "com.xiaoyu.whale.receiver.VpnOperateReceiver"));
                 intent.putExtra("type", 2); //断开vpn
-                intent.setComponent(new ComponentName("com.github.shadowsocksdemo", "com.github.shadowsocksdemo.service.CentreService"));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                {
-                    startForegroundService(intent);
-                } else
-                {
-                    startService(intent);
-                }
+                sendBroadcast(intent);
             }
         });
         //注册接受vpn返回结果的广播
         receiver = new StateReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.shadowsocks.state");
+        filter.addAction("com.xiaoyu.whale.api.VPN_RESULT");
         registerReceiver(receiver, filter);
     }
 
@@ -105,14 +95,18 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
     }
 
-    private final int IDLE = 0;
-    private final int CONNECTING = 1;
-    private final int CONNECTED = 2;
-    private final int STOPPING = 3;
-    private final int STOPPED = 4;
-    private final int UserDenied = 10; //用户权限不足
-    private final int NoServer = 11;  //没有获取到ss服务器
-    private final int UnknownError = 12;
+    public final static int IDLE = 0; //
+    public final static int CONNECTING = 1; //连接中
+    public final static int CONNECTED = 2; //已连接
+    public final static int STOPPING = 3;  //断开中
+    public final static int STOPPED = 4; //已断开
+    public final static int OtherState = 9; //其他vpn状态，可以忽略
+    public final static int GetConfig = 10; //获取配置文件
+    public final static int UserError = 20; //用户权限不足
+    public final static int ConfigError = 21;  //没有获取到vpn配置，或者配置错误
+    public final static int NotSupport = 22; //系统不支持vpn服务
+    public final static int AuthDenied = 23; //权限不足...vpn请求对话框被决绝
+    public final static int UnknownError = 100;  //其他错误
 
     public class StateReceiver extends BroadcastReceiver
     {
@@ -120,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            int state = intent.getIntExtra("state", IDLE);
+            int state = intent.getIntExtra("VpnResult", IDLE);
             switch (state)
             {
                 case IDLE:
@@ -138,14 +132,23 @@ public class MainActivity extends AppCompatActivity
                 case STOPPED:
                     tv_state.setText("已断开");
                     break;
-                case UserDenied:
+                case UserError:
                     tv_state.setText("用户权限不足");
                     break;
-                case NoServer:
-                    tv_state.setText("没有获取到服务器");
+                case ConfigError:
+                    tv_state.setText("没有获取到vpn配置，或者配置错误");
+                    break;
+                case GetConfig:
+                    tv_state.setText("获取配置文件");
+                    break;
+                case NotSupport:
+                    tv_state.setText("系统不支持");
                     break;
                 case UnknownError:
                     tv_state.setText("未知错误");
+                    break;
+                case AuthDenied:
+                    tv_state.setText("权限不足");
                     break;
             }
         }
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
     public boolean checkSsExist()
     {
-        return checkApkExist(this, "com.github.shadowsocksdemo");
+        return checkApkExist(this, "com.xiaoyu.whale");
     }
 
 }
